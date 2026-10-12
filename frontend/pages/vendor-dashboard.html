@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendor Dashboard - NEXORA</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        .dashboard-container { max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl); display: grid; grid-template-columns: 250px 1fr; gap: var(--spacing-xl); }
+        .sidebar { background: var(--color-surface); border-radius: var(--radius-lg); padding: var(--spacing-md) 0; border: 1px solid var(--color-border); height: fit-content; }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav li a { display: flex; align-items: center; padding: var(--spacing-md) var(--spacing-lg); color: var(--color-text-light); text-decoration: none; transition: all 0.2s ease; cursor: pointer; }
+        .sidebar-nav li a i { margin-right: var(--spacing-sm); font-size: 1.25rem; }
+        .sidebar-nav li a:hover, .sidebar-nav li a.active { background: rgba(255,255,255,0.05); color: var(--color-primary); border-left: 3px solid var(--color-primary); }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xl); }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-xl); }
+        .stat-card { background: var(--color-surface); border: 1px solid var(--color-border); padding: var(--spacing-lg); border-radius: var(--radius-md); }
+        .stat-card h3 { font-size: 0.875rem; color: var(--color-text-light); margin-bottom: var(--spacing-xs); }
+        .stat-card .value { font-size: 1.5rem; font-weight: 700; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+        th { color: var(--color-text-light); font-weight: 500; font-size: 0.875rem; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .badge.active { background: #16a34a; color: white; }
+        .badge.pending { background: #ca8a04; color: white; }
+        /* Add Product Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--color-surface); padding: 2rem; border-radius: var(--radius-lg); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--color-border); }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--color-text-light); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-background); color: var(--color-text-primary); }
+        .form-group select option { background: var(--color-surface); color: var(--color-text-primary); }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <main class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a data-target="overview" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
+                <li><a data-target="products"><i class='bx bx-box'></i> My Products</a></li>
+                <li><a data-target="orders"><i class='bx bx-list-ul'></i> Orders</a></li>
+                <li><a data-target="profile"><i class='bx bx-store-alt'></i> Store Profile</a></li>
+            </ul>
+        </aside>
+
+        <section class="dashboard-content">
+            <!-- OVERVIEW -->
+            <div id="view-overview" class="view-section active">
+                <div class="dashboard-header">
+                    <h1 id="vendor-store-name">Vendor Dashboard</h1>
+                    <button class="btn btn-primary" onclick="document.getElementById('productModal').classList.add('active')"><i class='bx bx-plus'></i> Add Product</button>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-card"><h3>Total Products</h3><div class="value" id="stat-products">...</div></div>
+                    <div class="stat-card"><h3>Pending Approvals</h3><div class="value" id="stat-pending">...</div></div>
+                    <div class="stat-card"><h3>Demo Sales</h3><div class="value" id="stat-sales">...</div></div>
+                </div>
+            </div>
+
+            <!-- PRODUCTS -->
+            <div id="view-products" class="view-section">
+                <div class="dashboard-header">
+                    <h1>My Products</h1>
+                    <button class="btn btn-primary" onclick="document.getElementById('productModal').classList.add('active')"><i class='bx bx-plus'></i> Add Product</button>
+                </div>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <table>
+                        <thead><tr><th>Product Name</th><th>Price</th><th>Stock</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="products-tbody"><tr><td colspan="5">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- ORDERS -->
+            <div id="view-orders" class="view-section">
+                <div class="dashboard-header"><h1>Orders</h1></div>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <p style="color: var(--color-text-light);">No recent orders.</p>
+                </div>
+            </div>
+
+            <!-- PROFILE -->
+            <div id="view-profile" class="view-section">
+                <div class="dashboard-header"><h1>Store Profile</h1></div>
+                <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <p id="profile-details" style="color: var(--color-text-light);">Loading...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; align-items: center;">
+                <h2 style="font-size: 1.5rem; color: #f8fafc;">Add New Product</h2>
+                <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.5rem;" onclick="document.getElementById('productModal').classList.remove('active')"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="add-product-form">
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                    <!-- Left: Image -->
+                    <div>
+                        <div class="form-group">
+                            <label>Product Image</label>
+                            <div id="img-preview" style="width: 100%; height: 200px; background: #334155; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem; border: 1px dashed #64748b;">
+                                <span style="color: #94a3b8;">No Image</span>
+                            </div>
+                            <input type="file" id="p-image" accept="image/*" required style="padding: 0; border: none; background: transparent;">
+                            <input type="hidden" id="p-image-b64">
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Details -->
+                    <div>
+                        <div class="form-group"><label>Product Name</label><input type="text" id="p-name" required></div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="p-cat" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-background); color: var(--color-text-primary); cursor: pointer;">
+                                <option value="" style="background: var(--color-surface); color: var(--color-text-primary);">Loading categories...</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Original Price (₹)</label>
+                                <input type="number" id="p-price" min="1" step="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Discount (%)</label>
+                                <input type="number" id="p-discount" min="0" max="99" step="1" value="0" required>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem; color: #cbd5e1; font-size: 0.9rem;">
+                            Selling Price: <strong id="p-selling-price" style="color: #10b981; font-size: 1.1rem;">₹0</strong>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Initial Stock</label>
+                            <input type="number" id="p-stock" min="0" step="1" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Description</label>
+                    <textarea id="p-desc" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" id="p-submit-btn" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem;">Submit Product for Approval</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        import { injectFooter } from '../js/ui.js';
+        import { api } from '../js/api.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = auth.getCurrentUser();
+            if (!user) { window.location.href = '/pages/login.html'; return; }
+            
+            try {
+                const vendorData = await api.get('/vendors/me');
+                if (vendorData.status !== 'APPROVED') {
+                    window.location.href = '/pages/vendor-register.html'; return;
+                }
+                document.getElementById('vendor-store-name').innerText = vendorData.store_name;
+                document.getElementById('profile-details').innerHTML = `
+                    <strong>Store Name:</strong> ${vendorData.store_name}<br>
+                    <strong>Status:</strong> ${vendorData.status}<br>
+                    <strong>Phone:</strong> ${vendorData.phone || 'N/A'}<br>
+                    <strong>Description:</strong> ${vendorData.store_description || 'N/A'}
+                `;
+                
+                // Refresh local user state if role is stale
+                if (user.role !== 'VENDOR') {
+                    await auth.fetchCurrentUser();
+                }
+                
+                await loadProducts();
+            } catch (e) {
+                console.error(e);
+                window.location.href = '/pages/vendor-register.html';
+            }
+
+            // Navigation
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    
+                    document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+                    document.getElementById('view-' + e.currentTarget.getAttribute('data-target')).classList.add('active');
+                });
+            });
+
+
+            // Form Submit
+            const pPrice = document.getElementById('p-price');
+            const pDiscount = document.getElementById('p-discount');
+            const pSellingPrice = document.getElementById('p-selling-price');
+            const pImage = document.getElementById('p-image');
+            const pImageB64 = document.getElementById('p-image-b64');
+            const imgPreview = document.getElementById('img-preview');
+            const pCat = document.getElementById('p-cat');
+            
+            function updatePrice() {
+                const price = parseFloat(pPrice.value) || 0;
+                const disc = parseFloat(pDiscount.value) || 0;
+                const selling = price - (price * disc / 100);
+                pSellingPrice.innerText = '₹' + selling.toFixed(2);
+            }
+            
+            pPrice.addEventListener('input', updatePrice);
+            pDiscount.addEventListener('input', updatePrice);
+            
+            pImage.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        pImageB64.value = evt.target.result;
+                        imgPreview.innerHTML = '<img src="' + evt.target.result + '" style="width: 100%; height: 100%; object-fit: cover;">';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Load Categories
+            try {
+                const cats = await api.get('/categories');
+                pCat.innerHTML = '<option value="">Select Category...</option>' + cats.map(c => '<option value="' + c.id + '">' + c.name + '</option>').join('');
+            } catch(e) {
+                pCat.innerHTML = '<option value="">Failed to load</option>';
+            }
+
+            document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('p-submit-btn');
+                btn.disabled = true;
+                btn.innerText = 'Submitting...';
+                
+                try {
+                    const payload = {
+                        name: document.getElementById('p-name').value,
+                        category_id: pCat.value,
+                        price: parseFloat(pPrice.value),
+                        stock: parseInt(document.getElementById('p-stock').value),
+                        description: document.getElementById('p-desc').value,
+                        discount: parseFloat(pDiscount.value) || 0.0,
+                        image_url: pImageB64.value || null
+                    };
+                    await api.post('/products', payload);
+                    alert('Product submitted successfully!');
+                    document.getElementById('productModal').classList.remove('active');
+                    e.target.reset();
+                    imgPreview.innerHTML = '<span style="color: #94a3b8;">No Image</span>';
+                    pSellingPrice.innerText = '₹0';
+                    await loadProducts();
+                } catch(err) {
+                    alert('Error creating product: ' + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerText = 'Submit Product for Approval';
+                }
+            });
+            
+            injectFooter();
+        });
+
+        async function loadProducts() {
+            try {
+                const products = await api.get('/products/me');
+                document.getElementById('stat-products').innerText = products.length;
+                document.getElementById('stat-pending').innerText = products.filter(p => p.status === 'PENDING').length;
+                
+                const tbody = document.getElementById('products-tbody');
+                if (products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5">No products found.</td></tr>';
+                } else {
+                    tbody.innerHTML = products.map(p => `
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>₹${p.price}</td>
+                            <td>${p.inventory ? p.inventory.stock : 0}</td>
+                            <td><span class="badge ${p.status.toLowerCase()}">${p.status}</span></td>
+                            <td><button class="btn btn-outline" style="padding: 2px 6px; font-size: 12px;">Edit</button></td>
+                        </tr>
+                    `).join('');
+                }
+            } catch(e) {
+                document.getElementById('products-tbody').innerHTML = '<tr><td colspan="5" style="color: var(--color-danger);">Failed to load products.</td></tr>';
+            }
+        }
+    </script>
+</body>
+</html>

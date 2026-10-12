@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - NEXORA</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="/">NEXORA</a>
+            </div>
+
+                        <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/pages/shop.html">Shop</a>
+                <a href="/pages/shop.html">Categories</a>
+                <a href="/pages/vendor-register.html">Vendors</a>
+                <a href="/pages/shop.html?deals=true">Deals</a>
+            </nav>
+
+            <div class="search-bar">
+                <form action="/pages/shop.html" method="GET" style="display:flex; width:100%; margin:0; padding:0; border:none; background:transparent;">
+                    <input type="text" name="search" placeholder="Search products, brands and more..." style="border:none; flex:1;">
+                    <button type="submit" style="border:none; background:transparent; cursor:pointer;"><i class='bx bx-search'></i></button>
+                </form>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/pages/wishlist.html" class="icon-btn"><i class='bx bx-heart'></i></a>
+                <a href="/pages/cart.html" class="icon-btn"><i class='bx bx-cart'></i><span id="nav-cart-count"
+                        style="display:none; position:absolute; top:-5px; right:-5px; background:var(--color-danger); color:white; border-radius:50%; font-size:10px; width:16px; height:16px; align-items:center; justify-content:center;"></span></a>
+                <a href="/pages/login.html" class="icon-btn" id="account-btn"><i class='bx bx-user'></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section">
+        <div class="section-header">
+            <h2>My Orders</h2>
+        </div>
+        
+        <div id="orders-grid" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+            <div class="skeleton skeleton-text" style="height: 150px; width: 100%;"></div>
+            <div class="skeleton skeleton-text" style="height: 150px; width: 100%;"></div>
+        </div>
+        
+        <div id="orders-empty" style="display: none; text-align: center; padding: var(--spacing-xxl);">
+            <i class='bx bx-package' style="font-size: 4rem; color: var(--color-text-muted);"></i>
+            <h3>No orders yet</h3>
+            <p>When you buy something, it will appear here.</p>
+            <a href="/pages/shop.html" class="btn btn-primary" style="margin-top: var(--spacing-md);">Start Shopping</a>
+        </div>
+    </main>
+
+    <script src="../js/ui.js" type="module"></script>
+    <script src="../js/orders.js" type="module"></script>
+</body>
+
+</html>

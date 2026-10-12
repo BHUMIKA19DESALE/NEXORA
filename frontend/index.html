@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA - Premium Multi-Vendor Marketplace</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/home.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="/">NEXORA</a>
+            </div>
+
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/pages/shop.html">Shop</a>
+                <a href="/pages/vendor-register.html">Vendors</a>
+                <a href="/pages/shop.html?deals=true">Deals</a>
+            </nav>
+
+            <div class="search-bar">
+                <form action="/pages/shop.html" method="GET"
+                    style="display:flex; width:100%; margin:0; padding:0; border:none; background:transparent;">
+                    <input type="text" name="search" placeholder="Search products, brands and more..."
+                        style="border:none; flex:1;">
+                    <button type="submit" style="border:none; background:transparent; cursor:pointer;"><i
+                            class='bx bx-search'></i></button>
+                </form>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/pages/vendor-register.html" class="btn-text">Sell on NEXORA</a>
+                <a href="/pages/wishlist.html" class="icon-btn"><i class='bx bx-heart'></i></a>
+                <a href="/pages/cart.html" class="icon-btn"><i class='bx bx-cart'></i></a>
+                <a href="/pages/login.html" class="icon-btn" id="account-btn"><i class='bx bx-user'></i></a>
+                <a href="#" class="icon-btn" id="logout-btn"
+                    style="display:none; color: var(--color-danger); font-weight: 600; margin-left: 12px;"><i
+                        class='bx bx-log-out'></i>Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-grid">
+                <div class="hero-card hero-main"
+                    style="background: linear-gradient(135deg, var(--color-surface-elevated), #2D3748);">
+                    <div class="hero-card-content">
+                        <h2>MacBook Air M4</h2>
+                        <p>Enjoy stunning picture clarity, immersive sound, and smart features designed to elevate your
+                            everyday entertainment.</p>
+                        <a href="/pages/shop.html?category_id=3" class="btn btn-primary btn-sm">Purchase Now <i
+                                class='bx bx-right-arrow-alt'></i></a>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80" alt="MacBook"
+                        loading="lazy" style="border-radius: 8px;">
+                </div>
+
+                <div class="hero-card hero-secondary" style="background: linear-gradient(135deg, #2D3748, #4A5568);">
+                    <img src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500&q=80" alt="Headphones"
+                        loading="lazy" class="hero-img-top">
+                    <div class="hero-card-content">
+                        <h2>Premium Audio</h2>
+                        <p>High-fidelity audio for an unparalleled listening experience.</p>
+                        <a href="/pages/shop.html?category_id=1" class="btn btn-secondary btn-sm"
+                            style="background: rgba(255,255,255,0.1); border:none; color:white;">Get Now <i
+                                class='bx bx-right-arrow-alt'></i></a>
+                    </div>
+                </div>
+
+                <div class="hero-sidebar">
+                    <div class="hero-card hero-small" style="background: #1e3a8a;">
+                        <div class="hero-card-content">
+                            <h3>Flat 20% Off on Regular Shoes</h3>
+                            <a href="/pages/shop.html?deals=true" class="btn btn-secondary btn-sm"
+                                style="background: rgba(255,255,255,0.1); border:none; color:white; padding: 0.5rem 1rem; font-size: 0.8rem;">Claim
+                                Discount <i class='bx bx-right-arrow-alt'></i></a>
+                        </div>
+                    </div>
+                    <div class="hero-card hero-small" style="background: #4c1d95;">
+                        <div class="hero-card-content">
+                            <h3>Discover Deals That Define You</h3>
+                            <a href="/pages/shop.html" class="btn btn-secondary btn-sm"
+                                style="background: rgba(255,255,255,0.1); border:none; color:white; padding: 0.5rem 1rem; font-size: 0.8rem;">Explore
+                                More <i class='bx bx-right-arrow-alt'></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section container">
+            <div class="section-header">
+                <h2>Featured Categories</h2>
+                <a href="/pages/shop.html" class="btn-text">View All Categories</a>
+            </div>
+            <div id="categories-container" class="category-row">
+                <!-- Data fetched via API -->
+            </div>
+            <div id="categories-error" style="color: var(--color-danger); display: none;"></div>
+        </section>
+
+        <section class="section container">
+            <div class="section-header">
+                <h2>New Arrivals</h2>
+                <a href="/pages/shop.html" class="btn-text">View All Products</a>
+            </div>
+            <div id="products-container" class="product-grid">
+                <!-- Data fetched via API -->
+            </div>
+            <div id="products-error" style="color: var(--color-danger); display: none;"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <h3 class="footer-logo">NEXORA</h3>
+                    <p>Discover products from independent and trusted vendors on one modern marketplace.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-linkedin'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>NEXORA</h4>
+                    <a href="#">About NEXORA</a>
+                    <a href="#">Our Story</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SHOP</h4>
+                    <a href="/pages/shop.html">All Products</a>
+                    <a href="/pages/shop.html">Categories</a>
+                    <a href="/pages/shop.html">New Arrivals</a>
+                    <a href="/pages/shop.html?deals=true">Deals</a>
+                    <a href="/pages/vendor-register.html">Vendors</a>
+                </div>
+                <div class="footer-col">
+                    <h4>CUSTOMER</h4>
+                    <a href="/pages/login.html">My Account</a>
+                    <a href="/pages/orders.html">Orders</a>
+                    <a href="/pages/wishlist.html">Wishlist</a>
+                    <a href="/pages/cart.html">Cart</a>
+                    <a href="#">Help Center</a>
+                    <a href="#">Returns & Refunds</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SELLERS</h4>
+                    <a href="/pages/vendor-register.html">Sell on NEXORA</a>
+                    <a href="/pages/vendor-register.html">Vendor Registration</a>
+                    <a href="/pages/login.html">Vendor Login</a>
+                    <a href="/pages/vendor-register.html">Vendor Dashboard</a>
+                    <a href="#">Seller Guidelines</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SUPPORT</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">FAQs</a>
+                    <a href="#">Shipping</a>
+                    <a href="#">Returns</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                    <a href="/pages/admin-login.html">Admin Login</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NEXORA Marketplace. All rights reserved.</p>
+                <div class="trust-badges">
+                    <i class='bx bxs-credit-card'></i>
+                    <i class='bx bxs-lock-alt'></i>
+                    <span>Secure Checkout</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/ui.js" type="module"></script>
+    <script src="js/home.js" type="module"></script>
+</body>
+
+</html>

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NEXORA</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-sidebar h2 {
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-xl);
+            font-size: 1.5rem;
+        }
+
+        .admin-nav {
+            list-style: none;
+            flex: 1;
+        }
+
+        .admin-nav li a {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-md);
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .admin-nav li a:hover,
+        .admin-nav li a.active {
+            background: #334155;
+            color: #fff;
+        }
+
+        .admin-nav li a i {
+            margin-right: var(--spacing-sm);
+            font-size: 1.25rem;
+        }
+
+        .admin-content {
+            flex: 1;
+            padding: var(--spacing-xl);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            color: #e2e8f0;
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <h2>NEXORA Admin</h2>
+            <ul class="admin-nav">
+                <li><a href="#" class="active"><i class='bx bxs-dashboard'></i> Dashboard Overview</a></li>
+                <li><a href="#" data-target="users"><i class='bx bx-group'></i> User Management</a></li>
+                <li><a href="#" data-target="vendors"><i class='bx bx-store'></i> Vendor Management</a></li>
+                <li><a href="#" data-target="vendor-verification"><i class='bx bx-check-shield'></i> Vendor
+                        Verification</a></li>
+                <li><a href="#" data-target="products"><i class='bx bx-box'></i> Product Management</a></li>
+                <li><a href="#" data-target="product-approvals"><i class='bx bx-check-circle'></i> Pending Product
+                        Approvals</a></li>
+                <li><a href="#"><i class='bx bx-list-ul'></i> All Customer Orders</a></li>
+                <li><a href="#"><i class='bx bx-credit-card'></i> Payment Management <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-package'></i> Inventory Management <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-bar-chart-alt-2'></i> Stock Reports <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-line-chart'></i> Sales Reports <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-category'></i> Category Management <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-history'></i> Audit Logs <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#"><i class='bx bx-cog'></i> Settings <span
+                            style="font-size:10px; background:#475569; padding:2px 4px; border-radius:4px; margin-left:auto;">Coming
+                            Soon</span></a></li>
+                <li><a href="#" id="admin-nav-logout" style="color: #ef4444;"><i class='bx bx-log-out'></i> Logout</a>
+                </li>
+                <li><a href="/" style="margin-top: 2rem;"><i class='bx bx-home'></i> Back to Site</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-content">
+            <style>
+                .admin-view {
+                    display: none;
+                }
+
+                .admin-view.active {
+                    display: block;
+                }
+
+                .btn-approve {
+                    display: inline-block;
+                    padding: 5px 12px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #fff;
+                    background: #16a34a;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background 0.15s;
+                }
+
+                .btn-approve:hover {
+                    background: #15803d;
+                }
+
+                .btn-reject {
+                    display: inline-block;
+                    padding: 5px 12px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #fff;
+                    background: #dc2626;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background 0.15s;
+                }
+
+                .btn-reject:hover {
+                    background: #b91c1c;
+                }
+
+                .btn-view-details {
+                    display: inline-block;
+                    padding: 5px 12px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #cbd5e1;
+                    background: #334155;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    margin-right: 4px;
+                    transition: background 0.15s;
+                }
+
+                .btn-view-details:hover {
+                    background: #475569;
+                }
+
+                #view-product-approvals h1 {
+                    font-size: 1.5rem;
+                    color: #f8fafc;
+                    margin-bottom: 1.5rem;
+                    border-bottom: 2px solid #6366f1;
+                    padding-bottom: 0.75rem;
+                }
+            </style>
+
+            <div class="topbar" style="display: flex; justify-content: flex-end; margin-bottom: var(--spacing-xl);">
+                <button id="logout-btn"
+                    style="background: #ef4444; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif;">
+                    <i class='bx bx-log-out'></i> Logout
+                </button>
+            </div>
+
+
+            <div id="view-overview" class="admin-view active">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">Overview</h1>
+
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <div class="value" id="stat-users">...</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Vendors</h3>
+                        <div class="value" id="stat-vendors">...</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Approvals</h3>
+                        <div class="value" id="stat-pending">...</div>
+                    </div>
+                </div>
+
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <h2 style="margin-bottom: var(--spacing-lg); color: #f8fafc;">Recent Vendor Applications</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Store Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vendor-table-body">
+                            <tr>
+                                <td colspan="3">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="view-users" class="admin-view">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">User Management</h1>
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody">
+                            <tr>
+                                <td colspan="4">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="view-vendors" class="admin-view">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">Vendor Management</h1>
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Store Name</th>
+                                <th>Owner ID</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vendors-all-tbody">
+                            <tr>
+                                <td colspan="4">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="view-vendor-verification" class="admin-view">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">Vendor Verification</h1>
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                        <input type="text" id="search-verification" placeholder="Search store or applicant..."
+                            style="padding: 0.5rem; border-radius: 4px; background: #0f172a; color: white; border: 1px solid #334155; width: 300px;">
+                        <button id="refresh-verification" class="btn btn-primary" style="padding: 0.5rem 1rem;"><i
+                                class='bx bx-refresh'></i> Refresh</button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Store Name</th>
+                                    <th>Applicant Name</th>
+                                    <th>Applicant Email</th>
+                                    <th>Business Info</th>
+                                    <th>App Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="verification-tbody">
+                                <tr>
+                                    <td colspan="7">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for details -->
+            <div id="verification-modal"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+                <div
+                    style="background:#1e293b; padding:2rem; border-radius:8px; width:100%; max-width:600px; color:#f8fafc; max-height:80vh; overflow-y:auto;">
+                    <h2 id="modal-store-name" style="margin-bottom:1rem;"></h2>
+                    <p><strong>Applicant Name:</strong> <span id="modal-name"></span></p>
+                    <p><strong>Applicant Email:</strong> <span id="modal-email"></span></p>
+                    <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
+                    <p><strong>Description:</strong> <span id="modal-desc"></span></p>
+                    <p><strong>Business Info:</strong> <span id="modal-biz"></span></p>
+                    <p><strong>Date:</strong> <span id="modal-date"></span></p>
+                    <div style="margin-top:2rem; display:flex; justify-content:flex-end;">
+                        <button id="close-modal-btn" class="btn btn-outline">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="view-products" class="admin-view">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">Product Management</h1>
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:1rem; gap:1rem;">
+                        <input type="text" id="search-products" placeholder="Search by name, category or vendor..."
+                            style="flex:1; padding: 0.5rem; border-radius: 4px; background: #0f172a; color: white; border: 1px solid #334155;">
+                        <select id="filter-products-status"
+                            style="padding: 0.5rem; border-radius: 4px; background: #0f172a; color: white; border: 1px solid #334155;">
+                            <option value="">All Statuses</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="APPROVED">Approved</option>
+                            <option value="REJECTED">Rejected</option>
+                        </select>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Vendor</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody">
+                                <tr>
+                                    <td colspan="7">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-product-approvals" class="admin-view">
+                <h1 style="margin-bottom: var(--spacing-xl); color: #f8fafc;">Pending Product Approvals</h1>
+                <div
+                    style="background: #1e293b; border: 1px solid #334155; border-radius: var(--radius-lg); padding: var(--spacing-lg);">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product Image</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Vendor</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Submitted Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-approvals-tbody">
+                                <tr>
+                                    <td colspan="7">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for product details -->
+            <div id="product-modal"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
+                <div
+                    style="background:#1e293b; padding:2rem; border-radius:8px; width:100%; max-width:600px; color:#f8fafc; max-height:80vh; overflow-y:auto;">
+                    <h2 id="pmodal-name" style="margin-bottom:1rem;"></h2>
+                    <img id="pmodal-img" src=""
+                        style="max-width:200px; max-height:200px; border-radius:8px; margin-bottom:1rem; display:none;" />
+                    <p><strong>Category:</strong> <span id="pmodal-category"></span></p>
+                    <p><strong>Vendor:</strong> <span id="pmodal-vendor"></span></p>
+                    <p><strong>Price:</strong> <span id="pmodal-price"></span></p>
+                    <p><strong>Stock:</strong> <span id="pmodal-stock"></span></p>
+                    <p><strong>Date:</strong> <span id="pmodal-date"></span></p>
+                    <p><strong>Description:</strong></p>
+                    <div id="pmodal-desc"
+                        style="background:#0f172a; padding:1rem; border-radius:4px; margin-top:0.5rem; margin-bottom:1rem; white-space:pre-wrap;">
+                    </div>
+                    <div style="margin-top:2rem; display:flex; justify-content:flex-end; gap:0.5rem;">
+                        <button id="pmodal-close-btn" class="btn btn-outline">Close</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        import { api } from '../js/api.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = auth.getCurrentUser();
+            if (!user || user.role !== 'ADMIN') {
+                window.location.href = '/';
+                return;
+            }
+
+            document.getElementById('logout-btn').addEventListener('click', () => { auth.logout(); window.location.href = '/pages/admin-login.html'; });
+            document.getElementById('admin-nav-logout').addEventListener('click', (e) => { e.preventDefault(); auth.logout(); window.location.href = '/pages/admin-login.html'; });
+            // cleanup complete
+
+            // Initial load of verification data
+            const loadVerificationData = async () => {
+                const tbody = document.getElementById('verification-tbody');
+                try {
+                    const vendors = await api.get('/admin/vendors');
+                    window.allVendors = vendors;
+                    renderVerificationTable(vendors);
+                } catch (e) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="color:#ef4444;">Failed to load data.</td></tr>';
+                }
+            };
+
+            const renderVerificationTable = (vendors) => {
+                const tbody = document.getElementById('verification-tbody');
+                const searchQuery = (document.getElementById('search-verification').value || '').toLowerCase();
+
+                const filtered = vendors.filter(v => {
+                    const matchStore = v.store_name?.toLowerCase().includes(searchQuery);
+                    const matchName = v.applicant_name?.toLowerCase().includes(searchQuery);
+                    const matchEmail = v.applicant_email?.toLowerCase().includes(searchQuery);
+                    return matchStore || matchName || matchEmail;
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">No applications found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(v => `
+                    <tr>
+                        <td>${v.store_name}</td>
+                        <td>${v.applicant_name || 'N/A'}</td>
+                        <td>${v.applicant_email || 'N/A'}</td>
+                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${v.business_info || 'N/A'}</td>
+                        <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                        <td><span class="badge" style="padding: 4px 8px; border-radius: 4px; background: ${v.status === 'PENDING' ? '#ca8a04' : (v.status === 'APPROVED' ? '#16a34a' : '#dc2626')}">${v.status}</span></td>
+                        <td>
+                            <button class="btn btn-secondary view-details-btn" data-id="${v.id}" style="padding: 4px 8px; font-size: 12px; margin-right:4px;">View Details</button>
+                            ${v.status === 'PENDING' ? `
+                                <button class="btn btn-primary approve-btn" data-id="${v.id}" style="padding: 4px 8px; font-size: 12px; margin-right:4px;">Approve</button>
+                                <button class="btn btn-outline reject-btn" data-id="${v.id}" style="padding: 4px 8px; font-size: 12px;">Reject</button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.querySelectorAll('.view-details-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const v = window.allVendors.find(x => x.id === id);
+                        if (v) {
+                            document.getElementById('modal-store-name').innerText = v.store_name;
+                            document.getElementById('modal-name').innerText = v.applicant_name || 'N/A';
+                            document.getElementById('modal-email').innerText = v.applicant_email || 'N/A';
+                            document.getElementById('modal-phone').innerText = v.phone || 'N/A';
+                            document.getElementById('modal-desc').innerText = v.store_description || 'N/A';
+                            document.getElementById('modal-biz').innerText = v.business_info || 'N/A';
+                            document.getElementById('modal-date').innerText = new Date(v.created_at).toLocaleString();
+                            document.getElementById('verification-modal').style.display = 'flex';
+                        }
+                    });
+                });
+
+                document.querySelectorAll('#verification-tbody .approve-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        if (confirm('Approve this vendor?')) {
+                            await api.post(`/admin/vendors/${id}/approve`);
+                            await loadVerificationData();
+                        }
+                    });
+                });
+
+                document.querySelectorAll('#verification-tbody .reject-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        if (confirm('Reject this vendor?')) {
+                            await api.post(`/admin/vendors/${id}/reject`);
+                            await loadVerificationData();
+                        }
+                    });
+                });
+            };
+
+            document.getElementById('search-verification').addEventListener('input', () => {
+                if (window.allVendors) renderVerificationTable(window.allVendors);
+            });
+
+            document.getElementById('refresh-verification').addEventListener('click', async () => {
+                await loadVerificationData();
+            });
+
+            document.getElementById('close-modal-btn').addEventListener('click', () => {
+                document.getElementById('verification-modal').style.display = 'none';
+            });
+
+            // Call it on load
+            loadVerificationData();
+
+            // Load Products data
+            const loadProductsData = async () => {
+                const tbodyAll = document.getElementById('products-tbody');
+                const tbodyApp = document.getElementById('product-approvals-tbody');
+                try {
+                    const products = await api.get('/admin/products');
+                    window.allProducts = products;
+                    renderProductsTables(products);
+                } catch (e) {
+                    if (tbodyAll) tbodyAll.innerHTML = '<tr><td colspan="7" style="color:#ef4444;">Failed to load products.</td></tr>';
+                    if (tbodyApp) tbodyApp.innerHTML = '<tr><td colspan="9" style="color:#ef4444;">Failed to load approvals.</td></tr>';
+                }
+            };
+            // expose for nav handler
+            window._loadProductsData = loadProductsData;
+
+            const renderProductsTables = (products) => {
+                // All products
+                const tbodyAll = document.getElementById('products-tbody');
+                const searchQ = (document.getElementById('search-products')?.value || '').toLowerCase();
+                const statusFilter = document.getElementById('filter-products-status')?.value;
+
+                let filtered = products;
+                if (statusFilter) filtered = filtered.filter(p => p.status === statusFilter);
+                if (searchQ) filtered = filtered.filter(p =>
+                    (p.name?.toLowerCase().includes(searchQ)) ||
+                    (p.category?.toLowerCase().includes(searchQ)) ||
+                    (p.vendor_store?.toLowerCase().includes(searchQ))
+                );
+
+                if (tbodyAll) {
+                    if (filtered.length === 0) {
+                        tbodyAll.innerHTML = '<tr><td colspan="7">No products found.</td></tr>';
+                    } else {
+                        tbodyAll.innerHTML = filtered.map(p => `
+                            <tr>
+                                <td>${p.image_url ? `<img src="${p.image_url}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '<div style="width:40px;height:40px;background:#334155;border-radius:4px;"></div>'}</td>
+                                <td>${p.name}</td>
+                                <td>${p.category}</td>
+                                <td>${p.vendor_store}</td>
+                                <td>$${p.price.toFixed(2)}</td>
+                                <td>${p.stock}</td>
+                                <td><span class="badge" style="padding: 4px 8px; border-radius: 4px; background: ${p.status === 'PENDING' ? '#ca8a04' : (p.status === 'APPROVED' ? '#16a34a' : '#dc2626')}">${p.status}</span></td>
+                            </tr>
+                        `).join('');
+                    }
+                }
+
+                // Approvals
+                const tbodyApp = document.getElementById('product-approvals-tbody');
+                if (tbodyApp) {
+                    const pending = products.filter(p => p.status === 'PENDING');
+                    if (pending.length === 0) {
+                        tbodyApp.innerHTML = '<tr><td colspan="9">No pending products found.</td></tr>';
+                    } else {
+                        tbodyApp.innerHTML = pending.map(p => {
+                            const imgHtml = p.image_url
+                                ? `<img src="${p.image_url}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
+                                : '<div style="width:48px;height:48px;background:#334155;border-radius:6px;display:flex;align-items:center;justify-content:center;"><i class="bx bx-image" style="color:#64748b;font-size:1.2rem;"></i></div>';
+                            const name = p.name ? p.name.replace(/</g, '&lt;').replace(/>/g, '&gt;') : 'N/A';
+                            const cat = p.category ? p.category.replace(/</g, '&lt;') : 'N/A';
+                            const vendor = p.vendor_store ? p.vendor_store.replace(/</g, '&lt;') : 'N/A';
+                            return `
+                            <tr>
+                                <td>${imgHtml}</td>
+                                <td style="font-weight:500;">${name}</td>
+                                <td>${cat}</td>
+                                <td>${vendor}</td>
+                                <td style="font-weight:600;color:#a5f3fc;">$${p.price.toFixed(2)}</td>
+                                <td>${p.stock}</td>
+                                <td style="color:#94a3b8;font-size:0.85rem;">${new Date(p.created_at).toLocaleDateString()}</td>
+                                <td><span style="background:#ca8a04;color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;">PENDING</span></td>
+                                <td style="white-space:nowrap;">
+                                    <button class="btn-view-details pview-btn" data-id="${p.id}">Details</button>
+                                    <button class="btn-approve papprove-btn" data-id="${p.id}">Approve</button>
+                                    <button class="btn-reject preject-btn" data-id="${p.id}" style="margin-left:4px;">Reject</button>
+                                </td>
+                            </tr>`;
+                        }).join('');
+
+                        document.querySelectorAll('.pview-btn').forEach(btn => btn.addEventListener('click', e => {
+                            const p = window.allProducts.find(x => x.id === e.target.getAttribute('data-id'));
+                            if (p) {
+                                document.getElementById('pmodal-name').innerText = p.name;
+                                document.getElementById('pmodal-category').innerText = p.category;
+                                document.getElementById('pmodal-vendor').innerText = p.vendor_store;
+                                document.getElementById('pmodal-price').innerText = '$' + p.price.toFixed(2);
+                                document.getElementById('pmodal-stock').innerText = p.stock;
+                                document.getElementById('pmodal-date').innerText = new Date(p.created_at).toLocaleString();
+                                document.getElementById('pmodal-desc').innerText = p.description || 'N/A';
+                                if (p.image_url) {
+                                    document.getElementById('pmodal-img').src = p.image_url;
+                                    document.getElementById('pmodal-img').style.display = 'block';
+                                } else {
+                                    document.getElementById('pmodal-img').style.display = 'none';
+                                }
+                                document.getElementById('product-modal').style.display = 'flex';
+                            }
+                        }));
+
+                        document.querySelectorAll('.papprove-btn').forEach(btn => btn.addEventListener('click', async e => {
+                            if (confirm('Are you sure you want to approve this product?')) {
+                                try {
+                                    await api.post(`/admin/products/${e.target.getAttribute('data-id')}/approve`);
+                                    alert('Product approved successfully.');
+                                    await loadProductsData();
+                                } catch (err) {
+                                    alert('Failed to approve product: ' + err.message);
+                                }
+                            }
+                        }));
+
+                        document.querySelectorAll('.preject-btn').forEach(btn => btn.addEventListener('click', async e => {
+                            if (confirm('Are you sure you want to reject this product?')) {
+                                try {
+                                    await api.post(`/admin/products/${e.target.getAttribute('data-id')}/reject`);
+                                    alert('Product rejected successfully.');
+                                    await loadProductsData();
+                                } catch (err) {
+                                    alert('Failed to reject product: ' + err.message);
+                                }
+                            }
+                        }));
+                    }
+                }
+            };
+
+            const sprod = document.getElementById('search-products');
+            if (sprod) sprod.addEventListener('input', () => { if (window.allProducts) renderProductsTables(window.allProducts); });
+            const fprod = document.getElementById('filter-products-status');
+            if (fprod) fprod.addEventListener('change', () => { if (window.allProducts) renderProductsTables(window.allProducts); });
+
+            const pclose = document.getElementById('pmodal-close-btn');
+            if (pclose) pclose.addEventListener('click', () => { document.getElementById('product-modal').style.display = 'none'; });
+
+            loadProductsData();
+
+
+            try {
+                const users = await api.get('/admin/users');
+                const vendors = await api.get('/admin/vendors');
+
+                document.getElementById('stat-users').innerText = users.length;
+                document.getElementById('stat-vendors').innerText = vendors.length;
+                document.getElementById('stat-pending').innerText = vendors.filter(v => v.status === 'PENDING').length;
+
+                const tbody = document.getElementById('vendor-table-body');
+                if (vendors.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3">No applications found.</td></tr>';
+                } else {
+                    tbody.innerHTML = vendors.map(v => `
+                        <tr>
+                            <td>${v.store_name}</td>
+                            <td><span class="badge" style="padding: 4px 8px; border-radius: 4px; background: ${v.status === 'PENDING' ? '#ca8a04' : (v.status === 'APPROVED' ? '#16a34a' : '#dc2626')}">${v.status}</span></td>
+                            <td>
+                                ${v.status === 'PENDING' ? `
+                                    <button class="btn btn-primary approve-btn" data-id="${v.id}" style="padding: 4px 8px; font-size: 12px;">Approve</button>
+                                    <button class="btn btn-outline reject-btn" data-id="${v.id}" style="padding: 4px 8px; font-size: 12px;">Reject</button>
+                                ` : ''}
+                            </td>
+                        </tr>
+                    `).join('');
+
+                    document.querySelectorAll('.approve-btn').forEach(btn => {
+                        btn.addEventListener('click', async (e) => {
+                            const id = e.target.getAttribute('data-id');
+                            await api.post(`/admin/vendors/${id}/approve`);
+                            window.location.reload();
+                        });
+                    });
+
+                    document.querySelectorAll('.reject-btn').forEach(btn => {
+                        btn.addEventListener('click', async (e) => {
+                            const id = e.target.getAttribute('data-id');
+                            await api.post(`/admin/vendors/${id}/reject`);
+                            window.location.reload();
+                        });
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load admin data', err);
+                document.getElementById('vendor-table-body').innerHTML = '<tr><td colspan="3" style="color: var(--color-danger);">Unable to load vendor applications. <button onclick="window.location.reload()" class="btn btn-sm btn-outline">Retry</button></td></tr>';
+            }
+        });
+
+        // Navigation Logic
+        document.querySelectorAll('.admin-nav a[data-target]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                document.querySelectorAll('.admin-view').forEach(view => view.classList.remove('active'));
+                const targetId = e.currentTarget.getAttribute('data-target');
+                const target = document.getElementById('view-' + targetId);
+                if (target) target.classList.add('active');
+
+                // Reload product data whenever user opens product-related tabs
+                if ((targetId === 'product-approvals' || targetId === 'products') && typeof window._loadProductsData === 'function') {
+                    window._loadProductsData();
+                }
+            });
+        });
+
+        async function loadAllData() {
+            try {
+                const users = await api.get('/admin/users');
+                const vendors = await api.get('/admin/vendors');
+
+                // Populate users
+                const utbody = document.getElementById('users-tbody');
+                if (utbody) {
+                    utbody.innerHTML = users.map(u => `
+                        <tr>
+                            <td>${u.full_name}</td>
+                            <td>${u.email}</td>
+                            <td><span class="badge" style="padding: 4px 8px; border-radius: 4px; background: #3b82f6;">${u.role}</span></td>
+                            <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">View</button></td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Populate all vendors
+                const vtbody = document.getElementById('vendors-all-tbody');
+                if (vtbody) {
+                    vtbody.innerHTML = vendors.map(v => `
+                        <tr>
+                            <td>${v.store_name}</td>
+                            <td style="font-size: 0.8rem; color: #94a3b8;">${v.user_id}</td>
+                            <td><span class="badge" style="padding: 4px 8px; border-radius: 4px; background: ${v.status === 'PENDING' ? '#ca8a04' : (v.status === 'APPROVED' ? '#16a34a' : '#dc2626')}">${v.status}</span></td>
+                            <td><button class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;">Manage</button></td>
+                        </tr>
+                    `).join('');
+                }
+
+            } catch (e) {
+                console.error("Error loading extended admin data", e);
+            }
+        }
+
+        // hook loadAllData into DOMContentLoaded
+        setTimeout(loadAllData, 500);
+
+    </script>
+</body>
+
+</html>

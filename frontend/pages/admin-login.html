@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NEXORA | Administrator Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        :root {
+            --admin-bg: #0f172a;
+            --admin-surface: #1e293b;
+            --admin-primary: #3b82f6;
+            --admin-text: #f8fafc;
+            --admin-text-muted: #94a3b8;
+            --admin-border: #334155;
+            --admin-danger: #ef4444;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .admin-login-container {
+            background: var(--admin-surface);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--admin-border);
+            text-align: center;
+        }
+        .admin-login-container h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.75rem;
+            color: var(--admin-text);
+        }
+        .admin-login-container p {
+            color: var(--admin-text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--admin-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--admin-border);
+            background: var(--admin-bg);
+            color: var(--admin-text);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--admin-primary);
+        }
+        .btn-admin {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            background: var(--admin-primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-admin:hover {
+            background: #2563eb;
+        }
+        .error-msg {
+            color: var(--admin-danger);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="admin-login-container">
+        <h1>NEXORA</h1>
+        <p>Administrator Access</p>
+        <form id="admin-login-form">
+            <div id="error-msg" class="error-msg"></div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="admin@nexora.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-admin">Secure Login</button>
+        </form>
+    </div>
+    
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+            const submitBtn = document.querySelector('.btn-admin');
+            
+            try {
+                submitBtn.innerText = 'Authenticating...';
+                submitBtn.disabled = true;
+                errorDiv.style.display = 'none';
+                
+                await auth.login(email, password);
+                
+                const user = auth.getCurrentUser();
+                if (user && user.role === 'ADMIN') {
+                    window.location.href = '/pages/admin-dashboard.html';
+                } else {
+                    auth.logout();
+                    errorDiv.innerText = 'Access Denied: You do not have administrator privileges.';
+                    errorDiv.style.display = 'block';
+                    submitBtn.innerText = 'Secure Login';
+                    submitBtn.disabled = false;
+                }
+            } catch (err) {
+                errorDiv.innerText = err.message || 'Authentication failed.';
+                errorDiv.style.display = 'block';
+                submitBtn.innerText = 'Secure Login';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NEXORA</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-background);
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 400px;
+            padding: var(--spacing-xl);
+            margin: var(--spacing-lg);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        .auth-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        .auth-footer {
+            margin-top: var(--spacing-lg);
+            text-align: center;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card auth-card">
+        <div class="auth-header">
+            <a href="/" style="font-size: 1.5rem; font-weight: 700; color: var(--color-primary);">NEXORA</a>
+            <h1 style="margin-top: 1rem;">Welcome back</h1>
+            <p>Enter your details to log in to your account.</p>
+        </div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-control" required placeholder="name@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-sm);">Sign In</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="register.html" class="btn-text">Sign up</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        import { toast } from '../js/toast.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.search.includes('logout=true')) {
+                toast.show('Logged out successfully', 'success');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button');
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = 'Signing in...';
+                await auth.login(email, password);
+                toast.show('Login successful!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } catch (error) {
+                toast.show(error.message || 'Login failed', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

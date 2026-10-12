@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Application - NEXORA</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        .vendor-container {
+            max-width: 800px;
+            margin: var(--spacing-xxl) auto;
+            padding: var(--spacing-lg);
+        }
+        .application-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-md);
+        }
+        .auth-prompt {
+            text-align: center;
+            padding: var(--spacing-xxl) 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <main class="vendor-container">
+        <div id="auth-state">
+            <!-- Loading state -->
+            <div style="text-align: center; padding: 40px;">
+                <i class='bx bx-loader-alt bx-spin' style="font-size: 2rem;"></i>
+            </div>
+        </div>
+
+        <div id="application-state" style="display: none;">
+            <div class="application-card">
+                <h1 style="margin-bottom: var(--spacing-xs);">Become a Vendor</h1>
+                <p style="color: var(--color-text-light); margin-bottom: var(--spacing-xl);">Submit your business details to start selling on NEXORA.</p>
+                
+                <form id="vendor-form">
+                    <div class="form-group">
+                        <label class="form-label" for="storeName">Store/Business Name *</label>
+                        <input type="text" id="storeName" class="form-control" required placeholder="e.g. Acme Electronics">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="storeDesc">Store Description</label>
+                        <textarea id="storeDesc" class="form-control" rows="3" placeholder="Tell us about what you sell..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="businessInfo">Business Registration Info</label>
+                        <input type="text" id="businessInfo" class="form-control" placeholder="e.g. Tax ID, GST Number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Contact Phone</label>
+                        <input type="text" id="phone" class="form-control" placeholder="+1 234 567 8900">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-md);">Submit Application</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="status-state" style="display: none;">
+            <div class="application-card" style="text-align: center;">
+                <i class='bx bx-time-five' style="font-size: 4rem; color: var(--color-primary); margin-bottom: 1rem;"></i>
+                <h2>Application Pending</h2>
+                <p style="color: var(--color-text-light); margin-top: 1rem;">Your vendor application is currently under review by our administration team. You will be notified once it is approved.</p>
+                <a href="/" class="btn btn-outline" style="margin-top: 2rem; display: inline-block;">Return to Home</a>
+            </div>
+        </div>
+        
+        <div id="approved-state" style="display: none;">
+            <div class="application-card" style="text-align: center;">
+                <i class='bx bx-check-circle' style="font-size: 4rem; color: var(--color-success); margin-bottom: 1rem;"></i>
+                <h2>You are an Approved Vendor!</h2>
+                <p style="color: var(--color-text-light); margin-top: 1rem;">Your account is ready for selling.</p>
+                <a href="/pages/vendor-dashboard.html" class="btn btn-primary" style="margin-top: 2rem; display: inline-block;">Go to Vendor Dashboard</a>
+            </div>
+        </div>
+        
+        <div id="rejected-state" style="display: none;">
+            <div class="application-card" style="text-align: center;">
+                <i class='bx bx-x-circle' style="font-size: 4rem; color: var(--color-danger); margin-bottom: 1rem;"></i>
+                <h2>Application Rejected</h2>
+                <p style="color: var(--color-text-light); margin-top: 1rem;">Unfortunately, your vendor application was rejected. Please contact support for more information.</p>
+                <a href="/" class="btn btn-outline" style="margin-top: 2rem; display: inline-block;">Return to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        import { api } from '../js/api.js';
+        import { toast } from '../js/toast.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authState = document.getElementById('auth-state');
+            
+            try {
+                const user = auth.getCurrentUser();
+                
+                if (!user) {
+                    authState.innerHTML = `
+                        <div class="application-card auth-prompt">
+                            <h2>Sign in to continue</h2>
+                            <p style="color: var(--color-text-light); margin: 1rem 0 2rem;">You need a customer account to apply as a vendor.</p>
+                            <a href="/pages/login.html?redirect=/pages/vendor-register.html" class="btn btn-primary">Sign In</a>
+                            <a href="/pages/register.html" class="btn btn-outline" style="margin-left: 1rem;">Create Account</a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Check current vendor status
+                try {
+                    const vendorData = await api.get('/vendors/me');
+                    authState.style.display = 'none';
+                    
+                    if (vendorData.status === 'PENDING') {
+                        document.getElementById('status-state').style.display = 'block';
+                    } else if (vendorData.status === 'APPROVED') {
+                        document.getElementById('approved-state').style.display = 'block';
+                    } else if (vendorData.status === 'REJECTED') {
+                        document.getElementById('rejected-state').style.display = 'block';
+                    }
+                } catch (err) {
+                    // If 404, they haven't applied yet
+                    if (err.message && (err.message.includes('not found') || err.message.includes('404'))) {
+                        authState.style.display = 'none';
+                        document.getElementById('application-state').style.display = 'block';
+                    } else {
+                        throw err; // Re-throw to outer catch block for actual errors
+                    }
+                }
+            } catch (error) {
+                console.error("Initialization error:", error);
+                authState.innerHTML = `
+                    <div class="application-card auth-prompt">
+                        <i class='bx bx-error-circle' style="font-size: 4rem; color: var(--color-danger); margin-bottom: 1rem;"></i>
+                        <h2>Error loading page</h2>
+                        <p style="color: var(--color-text-light); margin: 1rem 0 2rem;">${error.message || 'An unexpected network error occurred.'}</p>
+                        <button onclick="window.location.reload()" class="btn btn-primary">Retry</button>
+                    </div>
+                `;
+            }
+        });
+
+        document.getElementById('vendor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            
+            const data = {
+                store_name: document.getElementById('storeName').value,
+                store_description: document.getElementById('storeDesc').value,
+                business_info: document.getElementById('businessInfo').value,
+                phone: document.getElementById('phone').value
+            };
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = 'Submitting...';
+                
+                await api.post('/vendors/register', data);
+                
+                toast.show('Application submitted successfully!', 'success');
+                
+                document.getElementById('application-state').style.display = 'none';
+                document.getElementById('status-state').style.display = 'block';
+                
+            } catch (error) {
+                toast.show(error.message || 'Failed to submit application', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Application';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NEXORA</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-background);
+            padding: var(--spacing-xxl) 0;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            padding: var(--spacing-xl);
+            margin: var(--spacing-lg);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        .auth-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        .auth-footer {
+            margin-top: var(--spacing-lg);
+            text-align: center;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card auth-card">
+        <div class="auth-header">
+            <a href="/" style="font-size: 1.5rem; font-weight: 700; color: var(--color-primary);">NEXORA</a>
+            <h1 style="margin-top: 1rem;">Create an account</h1>
+            <p>Join the marketplace today.</p>
+        </div>
+        
+        <form id="register-form">
+            <div class="form-group">
+                <label class="form-label" for="fullname">Full Name</label>
+                <input type="text" id="fullname" class="form-control" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-control" required placeholder="name@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control" required minlength="8" placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="role">Account Type</label>
+                <select id="role" class="form-control" required>
+                    <option value="CUSTOMER">Customer (Buy Products)</option>
+                    <option value="VENDOR">Vendor (Sell Products)</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-md);">Create Account</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="login.html" class="btn-text">Sign in</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth } from '../js/auth.js';
+        import { toast } from '../js/toast.js';
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const btn = e.target.querySelector('button');
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = 'Creating account...';
+                
+                await auth.register({
+                    full_name: fullName,
+                    email: email,
+                    password: password,
+                    role: role
+                });
+                
+                toast.show('Registration successful! Logging you in...', 'success');
+                
+                // Auto login
+                await auth.login(email, password);
+                
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } catch (error) {
+                toast.show(error.message || 'Registration failed', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>

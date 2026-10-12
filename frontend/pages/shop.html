@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - NEXORA</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/shop.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="/">NEXORA</a>
+            </div>
+
+                        <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/pages/shop.html">Shop</a>
+                <a href="/pages/shop.html">Categories</a>
+                <a href="/pages/vendor-register.html">Vendors</a>
+                <a href="/pages/shop.html?deals=true">Deals</a>
+            </nav>
+
+            <div class="search-bar">
+                <form action="/pages/shop.html" method="GET" style="display:flex; width:100%; margin:0; padding:0; border:none; background:transparent;">
+                    <input type="text" name="search" placeholder="Search products, brands and more..." style="border:none; flex:1;">
+                    <button type="submit" style="border:none; background:transparent; cursor:pointer;"><i class='bx bx-search'></i></button>
+                </form>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/pages/wishlist.html" class="icon-btn"><i class='bx bx-heart'></i></a>
+                <a href="/pages/cart.html" class="icon-btn"><i class='bx bx-cart'></i><span id="nav-cart-count"
+                        style="display:none; position:absolute; top:-5px; right:-5px; background:var(--color-danger); color:white; border-radius:50%; font-size:10px; width:16px; height:16px; align-items:center; justify-content:center;"></span></a>
+                <a href="#" class="icon-btn" id="logout-btn" style="display:none; color: var(--color-danger); font-weight: 600; margin-left: 12px;"><i class='bx bx-log-out'></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="shop-layout">
+            <aside class="shop-sidebar">
+                <form id="filter-form">
+                    <div class="filter-group">
+                        <div class="filter-title">Categories</div>
+                        <div class="filter-list" id="category-filters">
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text"></div>
+                            <div class="skeleton skeleton-text"></div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-title">Price Range</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="number" name="min_price" class="form-control" placeholder="Min"
+                                style="padding:4px;">
+                            <span>-</span>
+                            <input type="number" name="max_price" class="form-control" placeholder="Max"
+                                style="padding:4px;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Apply Filters</button>
+                    <button type="button" id="clear-filters" class="btn btn-secondary"
+                        style="width: 100%; margin-top: 8px;">Clear</button>
+                </form>
+            </aside>
+
+            <div class="shop-main">
+                <div class="shop-toolbar">
+                    <div class="shop-results-count" id="results-count">Loading products...</div>
+                    <div class="shop-sort">
+                        <select id="sort-select" class="form-control" style="width: auto;">
+                            <option value="newest">Newest</option>
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="shop-grid" class="shop-grid">
+                    <!-- Skeletons loaded by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <h3 class="footer-logo">NEXORA</h3>
+                    <p>Discover products from independent and trusted vendors on one modern marketplace.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-linkedin'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>SHOP</h4>
+                    <a href="/pages/shop.html">All Products</a>
+                    <a href="/pages/shop.html">Categories</a>
+                    <a href="/pages/shop.html?deals=true">Deals</a>
+                    <a href="/pages/vendor-register.html">Vendors</a>
+                </div>
+                <div class="footer-col">
+                    <h4>CUSTOMER</h4>
+                    <a href="/pages/login.html">My Account</a>
+                    <a href="/pages/orders.html">Orders</a>
+                    <a href="/pages/cart.html">Cart</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SELLERS</h4>
+                    <a href="/pages/vendor-register.html">Sell on NEXORA</a>
+                    <a href="/pages/vendor-register.html">Vendor Registration</a>
+                    <a href="/pages/vendor-dashboard.html">Vendor Dashboard</a>
+                </div>
+                <div class="footer-col">
+                    <h4>SUPPORT</h4>
+                    <a href="#">Contact Us</a>
+                    <a href="#">FAQs</a>
+                    <a href="/pages/admin-login.html">Admin Login</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NEXORA Marketplace. All rights reserved.</p>
+                <div class="trust-badges">
+                    <i class='bx bxs-credit-card'></i>
+                    <i class='bx bxs-lock-alt'></i>
+                    <span>Secure Checkout</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="../js/ui.js?v=2" type="module"></script>
+    <script src="../js/shop.js?v=2" type="module"></script>
+</body>
+
+</html>

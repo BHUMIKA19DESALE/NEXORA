@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - NEXORA</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/payment-simulator.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <a href="/">NEXORA</a>
+            </div>
+
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/pages/shop.html">Shop</a>
+                <a href="/pages/shop.html">Categories</a>
+                <a href="/pages/vendor-register.html">Vendors</a>
+                <a href="/pages/shop.html?deals=true">Deals</a>
+            </nav>
+
+            <div class="search-bar">
+                <form action="/pages/shop.html" method="GET" style="display:flex; width:100%; margin:0; padding:0; border:none; background:transparent;">
+                    <input type="text" name="search" placeholder="Search products, brands and more..." style="border:none; flex:1;">
+                    <button type="submit" style="border:none; background:transparent; cursor:pointer;"><i class='bx bx-search'></i></button>
+                </form>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/pages/wishlist.html" class="icon-btn"><i class='bx bx-heart'></i></a>
+                <a href="/pages/cart.html" class="icon-btn" style="position:relative;">
+                    <i class='bx bx-cart'></i>
+                    <span id="nav-cart-count" style="display:none; position:absolute; top:-5px; right:-5px; background:var(--color-danger); color:white; border-radius:50%; font-size:10px; width:16px; height:16px; align-items:center; justify-content:center;"></span>
+                </a>
+                <a href="/pages/login.html" class="icon-btn" id="account-btn"><i class='bx bx-user'></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section">
+        <div class="section-header">
+            <h2>Checkout</h2>
+            <p style="font-size:0.85rem; color:var(--color-text-secondary); margin-top:4px;">
+                Complete your shipping details, then proceed to our secure demo payment gateway.
+            </p>
+        </div>
+
+        <div style="display: flex; gap: var(--spacing-xl); flex-wrap: wrap; margin-top: var(--spacing-lg);">
+
+            <!-- Shipping form -->
+            <div style="flex: 2; min-width: 300px;">
+                <form id="checkout-form" class="card" style="padding: var(--spacing-lg);">
+
+                    <h3 style="display:flex; align-items:center; gap:8px;">
+                        <i class='bx bx-map-pin' style="color:var(--color-primary);"></i>
+                        Shipping Address
+                    </h3>
+
+                    <div class="form-group" style="margin-top: var(--spacing-md);">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="full_name" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address Line 1</label>
+                        <input type="text" name="address_line_1" class="form-control" placeholder="123, Main Street" required>
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-md);">
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">City</label>
+                            <input type="text" name="city" class="form-control" placeholder="Mumbai" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">State</label>
+                            <input type="text" name="state" class="form-control" placeholder="Maharashtra" required>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: var(--spacing-md);">
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" name="postal_code" class="form-control" placeholder="400001" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="country" class="form-control" placeholder="India" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required>
+                    </div>
+
+                    <!-- Payment info notice -->
+                    <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: rgba(37,99,235,0.06); border: 1.5px solid rgba(37,99,235,0.2); border-radius: 10px;">
+                        <div style="display:flex; align-items:center; gap:8px; font-weight:600; color:#2563eb; font-size:0.88rem; margin-bottom:6px;">
+                            <i class='bx bx-lock-alt'></i>
+                            Payment via NEXORA Pay (Demo Gateway)
+                        </div>
+                        <p style="font-size:0.78rem; color:var(--color-text-secondary); margin:0;">
+                            After placing your order, you will be taken to our simulated payment gateway.
+                            Choose UPI, Card, Net Banking, or Wallet. <strong>No real money is charged.</strong>
+                        </p>
+                    </div>
+
+                    <button type="submit" id="checkout-btn" class="btn btn-primary"
+                        style="width: 100%; margin-top: var(--spacing-lg); padding: 14px; font-size: 1rem; display:flex; align-items:center; justify-content:center; gap:8px;">
+                        <i class='bx bx-lock-alt'></i>
+                        Proceed to Payment
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order summary sidebar -->
+            <div style="flex: 1; min-width: 280px;">
+                <div class="card" style="padding: var(--spacing-lg); position: sticky; top: 80px;">
+                    <h3 style="display:flex; align-items:center; gap:8px; margin-bottom: var(--spacing-md);">
+                        <i class='bx bx-receipt' style="color:var(--color-primary);"></i>
+                        Order Summary
+                    </h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm); font-size:0.9rem;">
+                        <span style="color:var(--color-text-secondary);">Subtotal</span>
+                        <span id="cart-subtotal" style="font-weight:600;">₹0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-sm); font-size:0.9rem;">
+                        <span style="color:var(--color-text-secondary);">Shipping</span>
+                        <span id="cart-shipping" style="font-weight:600;">₹0.00</span>
+                    </div>
+                    <hr style="margin: var(--spacing-md) 0; border: none; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem;">
+                        <span>Total</span>
+                        <span id="cart-total" style="color:var(--color-primary);">₹0.00</span>
+                    </div>
+                    <div style="margin-top: var(--spacing-md); display:flex; align-items:center; gap:6px; font-size:0.72rem; color:var(--color-text-muted);">
+                        <i class='bx bx-shield-quarter' style="color:#059669;"></i>
+                        Secure Demo Checkout · No real payment
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../js/ui.js" type="module"></script>
+    <script src="../js/checkout.js" type="module"></script>
+</body>
+
+</html>
